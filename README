@@ -1,0 +1,29 @@
+rules
+    rule * n
+    {
+        id
+        name
+        level
+        fmt
+        paraCnt
+        exec
+    }
+record
+    {
+        file
+        lineNum
+        errorType
+        errorPara
+    }
+scheduler
+    {
+
+    }
+paraParser
+    {
+
+    }
+main
+
+rule_base ------------> register rule
+          -> record-----→

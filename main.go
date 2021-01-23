@@ -2,10 +2,8 @@ package main
 
 import (
     "flag"
-    "tianshi25.github.com/record"
-    "tianshi25.github.com/recordDb"
-    "tianshi25.github.com/logs"
-    "tianshi25.github.com/checker"
+    "tianshi25.github.com/additionalCheck/db"
+    "tianshi25.github.com/additionalCheck/logs"
     "strconv"
     "os"
     "path/filepath"
@@ -24,8 +22,8 @@ ErrorWrongCommentFormat   12
 ErrorCopyRightDate        13
 ErrorLogicOpMisPosition   21`
 
-var path = flag.String("path", ".", "file or folder path")
-var ingnoreFlagsStr = flag.String("ignore", "", ignoreHelp)
+var path =
+var ingnoreFlagsStr =
 
 func main() {
     flag.Parse()
@@ -79,26 +77,6 @@ func getAllFiles(path string) ([]string, error) {
     }
     logs.I("")
     return paths, err
-}
-
-func getAllFlags(flagStr string) (flags []record.ErrorType, err error) {
-    flags = []record.ErrorType{}
-    if (len(flagStr) != 0) {
-        for _, c := range(strings.Split(flagStr, ",")) {
-            v, err := strconv.Atoi(c)
-            if err != nil {
-                logs.E("atoi string %v error %v\n", v, err)
-                return flags, err
-            }
-            flags = append(flags, record.ErrorType(v))
-        }
-    }
-    logs.I("flags:")
-    for _, f := range(flags) {
-        logs.I("%v", f)
-    }
-    logs.I("")
-    return flags, err
 }
 
 func contains(l []record.ErrorType, t record.ErrorType) bool {

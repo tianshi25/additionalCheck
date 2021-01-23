@@ -3,11 +3,46 @@ package checker
 import (
     "regexp"
     "strings"
-    "tianshi25.github.com/recordDb"
-    "tianshi25.github.com/record"
+    "tianshi25.github.com/additionalCheck/recordDb"
     "strconv"
     "time"
 )
+
+type ErrorType int
+
+const (
+    // white space
+    ErrorUsingTab ErrorType = 1
+    ErrorWrongIndent ErrorType = 2
+    ErrorExtraSpace ErrorType = 3
+
+    // comment
+    ErrorMixComment ErrorType = 11
+    ErrorWrongCommentFormat ErrorType = 12
+    ErrorCopyRightDate ErrorType = 13
+
+    // other
+    ErrorLogicOpMisPosition ErrorType = 21
+
+    ErrorInvalid ErrorType = 100
+)
+
+var ErrorTemplate  = [] struct {
+    id ErrorType
+    level int
+    template string
+    paraNum int
+} {
+    {ErrorUsingTab, logs.Error, "tab is detected at position %v", 1},
+    {ErrorWrongIndent, logs.Warn, "indent should increase 0 or 4", 0},
+    {ErrorExtraSpace, logs.Warn, "extra space is detected at position %v", 1},
+
+    {ErrorMixComment, logs.Warn, "mixing two comment type", 0},
+    {ErrorWrongCommentFormat, logs.Warn, "type /*\\n * \\n */ is suggested", 0},
+    {ErrorCopyRightDate, logs.Warn, "Please check copy right last modify date", 0},
+
+    {ErrorLogicOpMisPosition, logs.Error, "logic Operater: java line shart; C++ line end", 0},
+}
 
 func removeWindowsLineEnd(s string) string {
     return strings.Replace(s, "\r\n", "\n", -1)

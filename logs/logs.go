@@ -2,7 +2,6 @@ package logs
 
 import (
     "github.com/gookit/color"
-    "fmt"
 )
 
 const (
@@ -10,11 +9,15 @@ const (
     Info = 1
     Warn = 2
     Error = 3
+    Invalid = 100
 )
 
-var level = Info
+var level = Error
 
 func SetLevel(newLevel int) {
+    if (newLevel) == Invalid {
+        E("Invalid log level")
+    }
     level = newLevel
 }
 
@@ -44,14 +47,4 @@ func E(format string, s ...interface{}) {
     if level <= Error {
         color.Error.Printf(format, s...)
     }
-}
-
-func RecordSprintf(t int, format string, s ...interface{}) string {
-    if t == Error {
-        return fmt.Sprintf("Error: " + format, s...)
-    }
-    if t == Warn {
-        return fmt.Sprintf("Warn:  " + format, s...)
-    }
-    return fmt.Sprintf("Info:  " + format, s...)
 }

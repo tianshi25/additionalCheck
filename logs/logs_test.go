@@ -22,9 +22,3 @@ func TestI(t *testing.T) {
 func TestV(t *testing.T) {
     V("Verbose message")
 }
-
-func TestRecordSprintf(t *testing.T) {
-    fmt.Println(RecordSprintf(Error, "error string"))
-    fmt.Println(RecordSprintf(Warn, "warn string"))
-    fmt.Println(RecordSprintf(Info, "info string"))
-}
