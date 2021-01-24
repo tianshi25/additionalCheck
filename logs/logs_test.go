@@ -3,21 +3,21 @@ package logs
 import "testing"
 
 func TestSetLevel(t *testing.T) {
-    SetLevel(Verbose)
+	SetLevel(Verbose)
 }
 
 func TestE(t *testing.T) {
-    E("Error message")
+	E("Error message")
 }
 
 func TestW(t *testing.T) {
-    W("Warning message")
+	W("Warning message")
 }
 
 func TestI(t *testing.T) {
-    I("Info message")
+	I("Info message")
 }
 
 func TestV(t *testing.T) {
-    V("Verbose message")
+	V("Verbose message")
 }
