@@ -3,8 +3,8 @@ package db
 import (
 	"errors"
 	"fmt"
+	"github.com/tianshi25/additionalCheck/logs"
 	"strings"
-	"tianshi25.github.com/additionalCheck/logs"
 )
 
 const (

@@ -1,9 +1,9 @@
 package checker201
 
 import (
+	. "github.com/tianshi25/additionalCheck/db"
 	"reflect"
 	"testing"
-	. "tianshi25.github.com/additionalCheck/db"
 )
 
 func TestCheckErrorUsingTab(t *testing.T) {

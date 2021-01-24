@@ -2,13 +2,13 @@ package main
 
 import (
 	"fmt"
+	_ "github.com/tianshi25/additionalCheck/checkers"
+	. "github.com/tianshi25/additionalCheck/db"
+	"github.com/tianshi25/additionalCheck/logs"
+	. "github.com/tianshi25/additionalCheck/para"
+	. "github.com/tianshi25/additionalCheck/tool"
 	"io/ioutil"
 	"strings"
-	_ "tianshi25.github.com/additionalCheck/checkers"
-	. "tianshi25.github.com/additionalCheck/db"
-	"tianshi25.github.com/additionalCheck/logs"
-	. "tianshi25.github.com/additionalCheck/para"
-	. "tianshi25.github.com/additionalCheck/tool"
 )
 
 // var files, ignoreCheckerIds = GetPar

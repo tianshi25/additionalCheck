@@ -1,10 +1,10 @@
 package tool
 
 import (
+	"github.com/tianshi25/additionalCheck/logs"
 	"path/filepath"
 	"regexp"
 	"strings"
-	"tianshi25.github.com/additionalCheck/logs"
 )
 
 func ContainsInt(l []int, t int) bool {

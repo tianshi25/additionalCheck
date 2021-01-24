@@ -1,9 +1,9 @@
 package checkers
 
-import _ "tianshi25.github.com/additionalCheck/checkers/checker001"
-import _ "tianshi25.github.com/additionalCheck/checkers/checker002"
-import _ "tianshi25.github.com/additionalCheck/checkers/checker003"
-import _ "tianshi25.github.com/additionalCheck/checkers/checker101"
-import _ "tianshi25.github.com/additionalCheck/checkers/checker102"
-import _ "tianshi25.github.com/additionalCheck/checkers/checker103"
-import _ "tianshi25.github.com/additionalCheck/checkers/checker201"
+import _ "github.com/tianshi25/additionalCheck/checkers/checker001"
+import _ "github.com/tianshi25/additionalCheck/checkers/checker002"
+import _ "github.com/tianshi25/additionalCheck/checkers/checker003"
+import _ "github.com/tianshi25/additionalCheck/checkers/checker101"
+import _ "github.com/tianshi25/additionalCheck/checkers/checker102"
+import _ "github.com/tianshi25/additionalCheck/checkers/checker103"
+import _ "github.com/tianshi25/additionalCheck/checkers/checker201"

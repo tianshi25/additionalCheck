@@ -2,14 +2,14 @@ package para
 
 import (
 	"flag"
+	"github.com/tianshi25/additionalCheck/db"
+	"github.com/tianshi25/additionalCheck/logs"
+	"github.com/tianshi25/additionalCheck/tool"
 	"os"
 	"path/filepath"
 	"regexp"
 	"strconv"
 	"strings"
-	"tianshi25.github.com/additionalCheck/db"
-	"tianshi25.github.com/additionalCheck/logs"
-	"tianshi25.github.com/additionalCheck/tool"
 )
 
 func GetPara() (fileList []string, ignoreCheckerIds []int, getInfoCheckerId int) {

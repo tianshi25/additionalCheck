@@ -1,10 +1,10 @@
 package checker103
 
 import (
+	. "github.com/tianshi25/additionalCheck/db"
+	. "github.com/tianshi25/additionalCheck/tool"
 	"regexp"
 	"strconv"
-	. "tianshi25.github.com/additionalCheck/db"
-	. "tianshi25.github.com/additionalCheck/tool"
 	"time"
 )
 

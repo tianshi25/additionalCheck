@@ -1,9 +1,9 @@
 package checker002
 
 import (
+	. "github.com/tianshi25/additionalCheck/db"
 	"reflect"
 	"testing"
-	. "tianshi25.github.com/additionalCheck/db"
 )
 
 func TestRuleIndentIncreaseNot4(t *testing.T) {

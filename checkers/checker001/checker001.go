@@ -1,9 +1,9 @@
 package checker001
 
 import (
+	. "github.com/tianshi25/additionalCheck/db"
+	. "github.com/tianshi25/additionalCheck/tool"
 	"strings"
-	. "tianshi25.github.com/additionalCheck/db"
-	. "tianshi25.github.com/additionalCheck/tool"
 )
 
 const RULE_ID int = 1
