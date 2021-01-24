@@ -1,7 +1,6 @@
 package logs
 
 import "testing"
-import "fmt"
 
 func TestSetLevel(t *testing.T) {
     SetLevel(Verbose)

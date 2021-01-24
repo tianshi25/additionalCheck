@@ -74,15 +74,85 @@ func TestReplaceComments(t *testing.T) {
         out string
     } {
         { "adb\n   /*a\ndb*/efg\nhi", "adb\n\nefg\nhi" },
+        { "adb    /*efg*/", "adb" },
+        { "    abc   /*efg*/ ", "    abc "},
         { "adb    //comment\n\nef\ng", "adb\n\nef\ng" },
         { "adbefg", "adbefg" },
         { "", "" },
     }
 
     for _, test := range(tests) {
-        if ReplaceComments(test.in) != test.out {
+        out := ReplaceComments(test.in)
+        if out != test.out {
             t.Errorf("test fail, input:%#v expected:%#v output:%#v",
-                test.in, test.out, ReplaceComments(test.in))
+                test.in, test.out, out)
+        }
+    }
+}
+
+func TestGetIndentSpaceNum(t *testing.T) {
+    tests := [] struct {
+        in string
+        out int
+    } {
+        { "    abc d", 4 },
+        { "    \n", 4 },
+        { "abc    de", 0 },
+        { "", 0 },
+    }
+
+    for _, test := range(tests) {
+        num := GetIndentSpaceNum(test.in)
+        if num != test.out {
+            t.Errorf("test fail, input:%#v expected:%#v output:%#v",
+                test.in, test.out, num)
+        }
+    }
+}
+
+func TestFileExtensionIsC(t *testing.T) {
+    tests := [] struct {
+        in string
+        out bool
+    } {
+        { ".c", false },
+        { "a.c", true },
+        { "a.cpp", true },
+        { "a/b.cpp", true },
+        { "a.h", true },
+        { "a.hpp", true },
+        { "a.java", false},
+        { "", false },
+    }
+
+    for _, test := range(tests) {
+        num := FileExtensionIsC(test.in)
+        if num != test.out {
+            t.Errorf("test fail, input:%#v expected:%#v output:%#v",
+                test.in, test.out, num)
+        }
+    }
+}
+
+func TestFileExtensionIsJava(t *testing.T) {
+    tests := [] struct {
+        in string
+        out bool
+    } {
+        { ".java", false },
+        { "a.c", false },
+        { "a.cpp", false },
+        { "a/b.java", true },
+        { "a.h", false },
+        { "a.java", true },
+        { "", false },
+    }
+
+    for _, test := range(tests) {
+        num := FileExtensionIsJava(test.in)
+        if num != test.out {
+            t.Errorf("test fail, input:%#v expected:%#v output:%#v",
+                test.in, test.out, num)
         }
     }
 }

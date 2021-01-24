@@ -75,7 +75,7 @@ func getExtensionList(extensionStr string) (exts []string) {
 }
 
 func getExtensionRegex(extensions []string) string {
-    return `.*\.(` + strings.Join(extensions, "|") + `)$`
+    return `.+\.(` + strings.Join(extensions, "|") + `)$`
 }
 
 func getFileListForPath(searchPath string, extensions []string) (fileList []string) {
@@ -90,6 +90,7 @@ func getFileListForPath(searchPath string, extensions []string) (fileList []stri
             return nil
         }
         if matched, err := regexp.MatchString(regex, filepath.Base(currPath)); err != nil {
+            logs.E("error occur when match string")
             return err
         } else if matched {
             fileList = append(fileList, currPath)

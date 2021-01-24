@@ -31,9 +31,8 @@ func (rule *Rule) getResultStr(filePath string, lineNum int, para []interface{})
 
     localPara := []interface{}{filePath, lineNum}
     localPara = append(localPara, para...)
-    logs.E("tianshi %#v", localPara)
 
-    return rule.Level.getStr() + fmt.Sprintf("%v:%v:" + rule.Fmt, localPara...)
+    return rule.Level.getStr() + fmt.Sprintf(" %v:%v:" + rule.Fmt, localPara...)
 }
 
 func (rule *Rule) getBrief() string {

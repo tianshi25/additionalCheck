@@ -6,7 +6,7 @@ import (
     "reflect"
 )
 
-func TestCheckErrorUsingTab(t *testing.T) {
+func TestCheckTabDetected(t *testing.T) {
     tests := [] struct {
         in string
         out []string
@@ -14,14 +14,14 @@ func TestCheckErrorUsingTab(t *testing.T) {
         {
             "line1ab\t\nline2\nline3\t\n",
             []string{
-                "ERROR  file1:1:tab is detected at position 7",
-                "ERROR  file1:3:tab is detected at position 5",
+                "ERROR   file1:1:tab is detected at position 7",
+                "ERROR   file1:3:tab is detected at position 5",
             },
         },
         {
             "\n\t\t",
             []string{
-                "ERROR  file1:2:tab is detected at position 0",
+                "ERROR   file1:2:tab is detected at position 0",
             },
         },
         { "line1\nline2\nline3\n", []string(nil)},

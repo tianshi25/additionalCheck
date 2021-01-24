@@ -92,7 +92,7 @@ func TestGetResultStr(t *testing.T) {
             "path1",
             100,
             []interface{}{1},
-            "ERROR  path1:100:str 1",
+            "ERROR   path1:100:str 1",
         },
         {
             [] Rule {

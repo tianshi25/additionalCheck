@@ -8,6 +8,7 @@ import (
     . "tianshi25.github.com/additionalCheck/tool"
     "io/ioutil"
     "fmt"
+    "strings"
 )
 
 // var files, ignoreCheckerIds = GetPar
@@ -19,9 +20,8 @@ func main() {
         fmt.Printf("Check %v info: " + GetInfo(getInfoCheckerId) + "\n", getInfoCheckerId)
         return
     }
-    logs.E("%#v,%#v,%#v", files, ignoreCheckerIds, getInfoCheckerId)
     records := doJob(files, ignoreCheckerIds)
-    fmt.Println(GetRecordsStr(records))
+    fmt.Println(strings.Join(GetRecordsStr(records), "\n"))
 }
 
 func doJob(fileList []string, ignoreCheckerId []int) (ret []Record) {
