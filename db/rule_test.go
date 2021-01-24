@@ -13,7 +13,7 @@ func TestRegisterRule(t *testing.T) {
     } {
         {
             Rule { Id:1, Name:"1", Level:ERROR,
-                Fmt:"str %v", ParaNum:1, Exec:nil, Description:"Description 1"},
+                Fmt:"str %v", ParaNum:1, Exec:nil, Info:"Info 1"},
             1,
         },
     }
@@ -24,7 +24,7 @@ func TestRegisterRule(t *testing.T) {
         if ret != test.len {
             t.Errorf("test fail, test:%#v | ret:%#v", test, ret)
         }
-        clearRules()
+        ClearRules()
     }
 }
 
@@ -38,9 +38,9 @@ func TestGetRule(t *testing.T) {
         {
             [] Rule {
                 Rule { Id:1, Name:"1", Level:ERROR,
-                    Fmt:"str %v", ParaNum:1, Exec:nil, Description:"Description 1"},
+                    Fmt:"str %v", ParaNum:1, Exec:nil, Info:"Info 1"},
                 Rule { Id:2, Name:"2", Level:ERROR,
-                    Fmt:"str %v", ParaNum:2, Exec:nil, Description:"Description 2"},
+                    Fmt:"str %v", ParaNum:2, Exec:nil, Info:"Info 2"},
             },
             1,
             1,
@@ -49,9 +49,9 @@ func TestGetRule(t *testing.T) {
         {
             [] Rule {
                 Rule { Id:1, Name:"1", Level:ERROR,
-                    Fmt:"str %v", ParaNum:1, Exec:nil, Description:"Description 1"},
+                    Fmt:"str %v", ParaNum:1, Exec:nil, Info:"Info 1"},
                 Rule { Id:2, Name:"2", Level:ERROR,
-                    Fmt:"str %v", ParaNum:2, Exec:nil, Description:"Description 2"},
+                    Fmt:"str %v", ParaNum:2, Exec:nil, Info:"Info 2"},
             },
             3,
             0,
@@ -63,12 +63,12 @@ func TestGetRule(t *testing.T) {
         for _, rule := range(test.rules) {
             RegisterRule(rule)
         }
-        ret, err := getRule(test.id)
+        ret, err := GetRule(test.id)
         if ret.Id != test.retId || !reflect.DeepEqual(err, test.retErr) {
             t.Errorf("test fail, test:%#v | ret:%#v err:%#v",
                 test , ret, err)
         }
-        clearRules()
+        ClearRules()
     }
 }
 
@@ -84,9 +84,9 @@ func TestGetResultStr(t *testing.T) {
         {
             [] Rule {
                 Rule { Id:1, Name:"1", Level:ERROR,
-                    Fmt:"str %v", ParaNum:1, Exec:nil, Description:"Description 1"},
+                    Fmt:"str %v", ParaNum:1, Exec:nil, Info:"Info 1"},
                 Rule { Id:2, Name:"2", Level:ERROR,
-                    Fmt:"str %v", ParaNum:2, Exec:nil, Description:"Description 2"},
+                    Fmt:"str %v", ParaNum:2, Exec:nil, Info:"Info 2"},
             },
             1,
             "path1",
@@ -97,9 +97,9 @@ func TestGetResultStr(t *testing.T) {
         {
             [] Rule {
                 Rule { Id:1, Name:"1", Level:ERROR,
-                    Fmt:"str %v", ParaNum:1, Exec:nil, Description:"Description 1"},
+                    Fmt:"str %v", ParaNum:1, Exec:nil, Info:"Info 1"},
                 Rule { Id:2, Name:"2", Level:ERROR,
-                    Fmt:"str %v", ParaNum:2, Exec:nil, Description:"Description 2"},
+                    Fmt:"str %v", ParaNum:2, Exec:nil, Info:"Info 2"},
             },
             1,
             "path1",
@@ -125,11 +125,11 @@ func TestGetResultStr(t *testing.T) {
         if ret != test.ret {
             t.Errorf("test fail, test:%#v | ret:%#v", test, ret)
         }
-        clearRules()
+        ClearRules()
     }
 }
 
-func TestGetDescription(t *testing.T) {
+func TestGetInfo(t *testing.T) {
     tests := []struct {
         rules []Rule
         id int
@@ -138,12 +138,12 @@ func TestGetDescription(t *testing.T) {
         {
             [] Rule {
                 Rule { Id:1, Name:"1", Level:ERROR,
-                    Fmt:"str %v", ParaNum:1, Exec:nil, Description:"Description 1"},
+                    Fmt:"str %v", ParaNum:1, Exec:nil, Info:"Info 1"},
                 Rule { Id:2, Name:"2", Level:ERROR,
-                    Fmt:"str %v", ParaNum:2, Exec:nil, Description:"Description 2"},
+                    Fmt:"str %v", ParaNum:2, Exec:nil, Info:"Info 2"},
             },
             1,
-            "Description 1",
+            "Info 1",
         },
         {
             [] Rule {},
@@ -156,11 +156,11 @@ func TestGetDescription(t *testing.T) {
         for _, rule := range(test.rules) {
             RegisterRule(rule)
         }
-        ret := GetDescription(test.id)
+        ret := GetInfo(test.id)
         if ret != test.ret {
             t.Errorf("test fail, test:%#v | ret:%#v", test, ret)
         }
-        clearRules()
+        ClearRules()
     }
 }
 
@@ -172,9 +172,9 @@ func TestGetBrief(t *testing.T) {
         {
             [] Rule {
                 Rule { Id:1, Name:"Name1", Level:ERROR,
-                    Fmt:"str %v", ParaNum:1, Exec:nil, Description:"Description 1"},
+                    Fmt:"str %v", ParaNum:1, Exec:nil, Info:"Info 1"},
                 Rule { Id:2, Name:"Name2", Level:ERROR,
-                    Fmt:"str %v", ParaNum:2, Exec:nil, Description:"Description 2"},
+                    Fmt:"str %v", ParaNum:2, Exec:nil, Info:"Info 2"},
             },
             "  1 Name1\n  2 Name2",
         },
@@ -192,6 +192,6 @@ func TestGetBrief(t *testing.T) {
         if ret != test.ret {
             t.Errorf("test fail, test:%#v | ret:%#v", test, ret)
         }
-        clearRules()
+        ClearRules()
     }
 }

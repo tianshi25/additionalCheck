@@ -11,7 +11,7 @@ const (
     INVALID_STR string = "Internal Error: fail to form string"
 )
 
-type CheckFunc func (filePath string, content string) Record
+type CheckFunc func (filePath string, content string) []Record
 
 type Rule struct {
     Id int
@@ -20,7 +20,7 @@ type Rule struct {
     Fmt string
     ParaNum int
     Exec CheckFunc
-    Description string
+    Info string
 }
 
 func (rule *Rule) getResultStr(filePath string, lineNum int, para []interface{}) string {
@@ -42,7 +42,7 @@ func (rule *Rule) getBrief() string {
 
 var rules []Rule
 
-func getRule(id int) (Rule, error) {
+func GetRule(id int) (Rule, error) {
     for _, rule := range(rules) {
         if rule.Id == id {
             return rule, nil
@@ -52,12 +52,16 @@ func getRule(id int) (Rule, error) {
     return Rule{}, errors.New("rule id not registered")
 }
 
-func clearRules() {
+func GetRules() []Rule {
+    return rules
+}
+
+func ClearRules() {
     rules = nil
 }
 
 func RegisterRule(rule Rule) {
-    _, err := getRule(rule.Id)
+    _, err := GetRule(rule.Id)
     if err == nil {
         logs.E("rule %v already registerd", rule.Id)
         return;
@@ -66,7 +70,7 @@ func RegisterRule(rule Rule) {
 }
 
 func GetResultStr(id int, filePath string, lineNum int, para []interface{}) string {
-    rule, err := getRule(id)
+    rule, err := GetRule(id)
     if err != nil {
         logs.E("rule %v not registerd", id)
         return INVALID_STR
@@ -74,13 +78,13 @@ func GetResultStr(id int, filePath string, lineNum int, para []interface{}) stri
     return rule.getResultStr(filePath, lineNum, para)
 }
 
-func GetDescription(id int) string {
-    rule, err := getRule(id)
+func GetInfo(id int) string {
+    rule, err := GetRule(id)
     if err != nil {
         logs.E("rule %v not registerd", id)
         return INVALID_STR
     }
-    return rule.Description
+    return rule.Info
 }
 
 func GetBriefs() string {

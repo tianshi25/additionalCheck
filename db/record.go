@@ -18,6 +18,13 @@ func (r Record) GetStr() string {
     return GetResultStr(r.errorId, r.filePath, r.lineNum, r.errorPara)
 }
 
+func GetRecordsStr(l []Record) (ret []string) {
+    for _, r := range(l) {
+        ret = append(ret, r.GetStr())
+    }
+    return
+}
+
 func (r1 Record) Less(r2 Record) bool {
     if r1.filePath < r2.filePath {
         return true

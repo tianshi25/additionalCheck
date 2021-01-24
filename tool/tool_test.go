@@ -18,9 +18,10 @@ func TestRemoveWindowsLineEnd(t *testing.T) {
     }
 
     for _, test := range(tests) {
-        if removeWindowsLineEnd(test.in) != test.out {
+        out := RemoveWindowsLineEnd(test.in)
+        if out != test.out {
             t.Errorf("test fail, input:%#v expected:%#v output:%#v",
-                test.in, test.out, removeWindowsLineEnd(test.in))
+                test.in, test.out, out)
         }
     }
 }
@@ -39,9 +40,10 @@ func TestGetAllComments(t *testing.T) {
     }
 
     for _, test := range(tests) {
-        if !reflect.DeepEqual(getAllComments(test.in), test.out) {
+        out := GetAllComments(test.in)
+        if !reflect.DeepEqual(out, test.out) {
             t.Errorf("test fail, input:%#v expected:%#v output:%#v",
-                test.in, test.out, getAllComments(test.in))
+                test.in, test.out, out)
         }
     }
 }

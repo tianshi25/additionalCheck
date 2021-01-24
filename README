@@ -27,3 +27,6 @@ main
 
 rule_base ------------> register rule
           -> record-----→
+
+issues:
+1. duplicate file
