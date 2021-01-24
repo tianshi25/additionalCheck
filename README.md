@@ -1,6 +1,7 @@
 # code format check
 
 ## Usage
+```
 Usage of additionalCheck_darwin_amd64:
   -ext string
         file extension to check
@@ -32,3 +33,4 @@ Usage of additionalCheck_darwin_amd64:
         paths to check
         default:.
         example:./1,./2 (default ".")
+```
