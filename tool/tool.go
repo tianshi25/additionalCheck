@@ -36,15 +36,12 @@ func GetAllComments(s string) []string {
     return []string{}
 }
 
-func getReplacementForComments(comment string) string {
-    lineCount := strings.Count(comment, "\n")
-    return "" + strings.Repeat("\n", lineCount)
+func getReplacementForComments(comment []byte) []byte {
+    lineCount := strings.Count(string(comment), "\n")
+    return []byte("" + strings.Repeat("\n", lineCount))
 }
 
 func ReplaceComments(s string) string {
-    allComments := GetAllComments(s)
-    for _, comment := range(allComments) {
-        s = strings.ReplaceAll(s, comment, getReplacementForComments(comment));
-    }
-    return s;
+    r := regexp.MustCompile(` *((?sm)//.*?$|/\*.*?\*/)`)
+    return string(r.ReplaceAllFunc([]byte(s), getReplacementForComments))
 }

@@ -29,4 +29,5 @@ rule_base ------------> register rule
           -> record-----→
 
 issues:
-1. duplicate file
+1. replace comments
+2. indent check

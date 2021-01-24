@@ -12,7 +12,6 @@ type ErrorType int
 
 const (
     // white space
-    ErrorUsingTab ErrorType = 1
     ErrorWrongIndent ErrorType = 2
     ErrorExtraSpace ErrorType = 3
 
@@ -33,7 +32,6 @@ var ErrorTemplate  = [] struct {
     template string
     paraNum int
 } {
-    {ErrorUsingTab, logs.Error, "tab is detected at position %v", 1},
     {ErrorWrongIndent, logs.Warn, "indent should increase 0 or 4", 0},
     {ErrorExtraSpace, logs.Warn, "extra space is detected at position %v", 1},
 

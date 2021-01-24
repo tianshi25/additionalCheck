@@ -60,9 +60,10 @@ func TestGetReplacementForComments(t *testing.T) {
     }
 
     for _, test := range(tests) {
-        if getReplacementForComments(test.in) != test.out {
+        ret := string(getReplacementForComments([]byte(test.in)))
+        if ret != test.out {
             t.Errorf("test fail, input:%#v expected:%#v output:%#v",
-                test.in, test.out, getReplacementForComments(test.in))
+                test.in, test.out, ret)
         }
     }
 }
@@ -72,8 +73,8 @@ func TestReplaceComments(t *testing.T) {
         in string
         out string
     } {
-        { "adb\n/*a\ndb*/efg\nhi", "adb\n\nefg\nhi" },
-        { "adb//comment\n\nef\ng", "adb\n\nef\ng" },
+        { "adb\n   /*a\ndb*/efg\nhi", "adb\n\nefg\nhi" },
+        { "adb    //comment\n\nef\ng", "adb\n\nef\ng" },
         { "adbefg", "adbefg" },
         { "", "" },
     }
