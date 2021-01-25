@@ -12,8 +12,8 @@ func TestCheckErrorMultilineCommitFormatWrong(t *testing.T) {
 		out []string
 	}{
 		{"/*\n * comment1\n * comment2\n */", []string(nil)},
-		{"    /*\n     * comment1\n     * comment2\n */", []string(nil)},
-		{"    /* comment2 */", []string{"SUGGEST file1:1:type /*\\n * \\n */ multiline commit is suggested"}},
+		{"\n    /*\n     * comment1\n     * comment2\n */", []string(nil)},
+		{"\n\n    /* comment2\n */", []string{"SUGGEST file1:3:type /*\\n * \\n */ multiline commit is suggested"}},
 		{"    /* \ncomment2 */", []string{"SUGGEST file1:1:type /*\\n * \\n */ multiline commit is suggested"}},
 		{"", []string(nil)},
 	}

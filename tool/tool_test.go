@@ -26,6 +26,29 @@ func TestRemoveWindowsLineEnd(t *testing.T) {
 	}
 }
 
+func TestGetAllCommentsWithLinNum(t *testing.T) {
+	tests := []struct {
+		in  string
+		out1 []string
+		out2 []int
+	}{
+		{"adb//comment data\n\nefg", []string{"//comment data"}, []int{1}},
+		{"adb/*comment\n *comment2*/efg", []string{"/*comment\n *comment2*/"}, []int{1}},
+		{"\n\n adb//comment data\n\nefg/*comment\n *comment2*/", []string{"//comment data", "/*comment\n *comment2*/"}, []int{3}},
+		{"\nadbefg", []string{}, []int{2}},
+		{"/*comment\n *comment2*/adb//comment data\nef", []string{"/*comment\n *comment2*/", "//comment data"}, []int{1}},
+		{"", []string{}, []int{0}},
+	}
+
+	for _, test := range tests {
+		out1, out2 := GetAllCommentsWithLineNum(test.in)
+		if !reflect.DeepEqual(out1, test.out1) && !reflect.DeepEqual(out2, test.out2) {
+			t.Errorf("test fail, input:%#v expected:%#v %#v output:%#v %#v",
+				test.in, test.out1, test.out2, out1, out2)
+		}
+	}
+}
+
 func TestGetAllComments(t *testing.T) {
 	tests := []struct {
 		in  string

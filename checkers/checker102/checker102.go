@@ -24,17 +24,20 @@ func init() {
 }
 
 func check(filePath, s string) []Record {
-	ret := []Record{}
+	var ret []Record
 	s = RemoveWindowsLineEnd(s)
-	comments := GetAllComments(s)
+	comments, lineNums := GetAllCommentsWithLineNum(s)
 	for i, comment := range comments {
 		if !strings.HasPrefix(comment, "/*") {
+			continue
+		}
+		if strings.Count(comment, "\n") == 0 {
 			continue
 		}
 		r := regexp.MustCompile(`/\*\n( +\* .*\n)+ *\*/`)
 		match := r.FindAllString(s, -1)
 		if match == nil {
-			r := NewRecord(filePath, i+1, RULE_ID, []interface{}{})
+			r := NewRecord(filePath, lineNums[i], RULE_ID, []interface{}{})
 			ret = append(ret, r)
 		}
 	}

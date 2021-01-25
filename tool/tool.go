@@ -29,6 +29,22 @@ func RemoveWindowsLineEnd(s string) string {
 	return strings.Replace(s, "\r\n", "\n", -1)
 }
 
+func GetAllCommentsWithLineNum(s string) (sRet []string, iRet []int) {
+	r := regexp.MustCompile(`(?sm)//.*?$|/\*.*?\*/`)
+	indexRanges := r.FindAllStringIndex(s, -1)
+	if indexRanges == nil {
+		return []string{}, []int{}
+	}
+
+	for _, indexRange := range indexRanges {
+		comment := s[indexRange[0] : indexRange[1]]
+		lineNum := strings.Count(s[:indexRange[0]], "\n") + 1
+		sRet = append(sRet, comment)
+		iRet = append(iRet, lineNum)
+	}
+	return sRet, iRet
+}
+
 func GetAllComments(s string) []string {
 	r := regexp.MustCompile(`(?sm)//.*?$|/\*.*?\*/`)
 	ret := r.FindAllString(s, -1)
