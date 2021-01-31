@@ -21,7 +21,7 @@ func GetPara() (fileList []string, checkerIds []int, getInfoCheckerId int) {
 	logLevel := flag.String("log", "Error", "log level\nvalue: Error Warn Info Verbose\ndefault:Error")
 	getInfoCheckerIdAddr := flag.Int("info", 0, "get checker id info\n"+db.GetBriefs())
 	flag.Parse()
-
+	setLogLevel(*logLevel)
 	if len(*ignoreStr) != 0 &&  len(*onlyStr) != 0 {
 		logs.E("ignore and only are conflict para")
 		return
@@ -37,7 +37,8 @@ func GetPara() (fileList []string, checkerIds []int, getInfoCheckerId int) {
 	}
 
 	SetFilter(*searchPath)
-	setLogLevel(*logLevel)
+	fileList = FilterFilePaths(fileList)
+	logs.I("files to check:\n" + strings.Join(fileList, "\n"))
 	return
 }
 
@@ -127,7 +128,6 @@ func getFileList(searchPath string, extensions []string) (fileList []string) {
 		}
 	}
 
-	logs.I("files to check:" + strings.Join(fileList, "\n"))
 	return
 }
 

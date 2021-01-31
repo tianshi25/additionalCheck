@@ -12,10 +12,14 @@ const (
 	Invalid = 100
 )
 
-var level = Error
+var level int
+
+func init() {
+	level = Warn
+}
 
 func SetLevel(newLevel int) {
-	if (newLevel) == Invalid {
+	if newLevel == Invalid {
 		E("Invalid log level")
 	}
 	level = newLevel
