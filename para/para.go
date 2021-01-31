@@ -13,7 +13,7 @@ import (
 )
 
 func GetPara() (fileList []string, ignoreCheckerIds []int, getInfoCheckerId int) {
-	searchPaths := flag.String("path", ".", "paths to check\ndefault:.\nexample:./1,./2")
+	searchPath := flag.String("path", ".", "paths to check\ndefault:.")
 	ignoreStr := flag.String("ignore", "", "ignore checker id:\nexample: 1,2\n"+db.GetBriefs())
 	extensionStr := flag.String("ext", "c,cpp,h,hpp,java,go", "file extension to check\ndefault: c,cpp,h,hpp,java,go")
 	logLevel := flag.String("log", "Error", "log level\nvalue: Error Warn Info Verbose\ndefault:Error")
@@ -22,7 +22,7 @@ func GetPara() (fileList []string, ignoreCheckerIds []int, getInfoCheckerId int)
 
 	getInfoCheckerId = *getInfoCheckerIdAddr
 	extensions := getExtensionList(*extensionStr)
-	fileList = getFileList(*searchPaths, extensions)
+	fileList = getFileList(*searchPath, extensions)
 	ignoreCheckerIds = getIgnoreCheckerId(*ignoreStr)
 	setLogLevel(*logLevel)
 	return
@@ -105,19 +105,15 @@ func getFileListForPath(searchPath string, extensions []string) (fileList []stri
 	return
 }
 
-func getFileList(searchPaths string, extensions []string) (fileList []string) {
-	for _, path := range strings.Split(searchPaths, ",") {
-		if len(path) == 0 {
-			continue
+func getFileList(searchPath string, extensions []string) (fileList []string) {
+	newFileList := getFileListForPath(searchPath, extensions)
+	for _, file := range newFileList {
+		file, _ = filepath.Rel(searchPath, file)
+		if !tool.ContainsString(fileList, file) {
+			fileList = append(fileList, file)
 		}
-		new_file_list := getFileListForPath(path, extensions)
-		for _, file := range new_file_list {
-			if !tool.ContainsString(fileList, file) {
-				fileList = append(fileList, file)
-			}
-		}
-
 	}
+
 	logs.I("files to check:" + strings.Join(fileList, "\n"))
 	return
 }
