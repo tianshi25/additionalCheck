@@ -5,8 +5,8 @@ import (
 	_ "github.com/tianshi25/additionalCheck/checkers"
 	. "github.com/tianshi25/additionalCheck/db"
 	"github.com/tianshi25/additionalCheck/logs"
+	// . "github.com/tianshi25/additionalCheck/filter"
 	. "github.com/tianshi25/additionalCheck/para"
-	. "github.com/tianshi25/additionalCheck/tool"
 	"io/ioutil"
 	"strings"
 )
@@ -24,16 +24,18 @@ func main() {
 	fmt.Println(strings.Join(GetRecordsStr(records), "\n"))
 }
 
-func doJob(fileList []string, ignoreCheckerId []int) (ret []Record) {
+func doJob(fileList []string, checkerIds []int) (ret []Record) {
 	for _, file := range fileList {
 		content, err := ioutil.ReadFile(file)
 		if err != nil {
 			logs.E("fail to open file %v", file)
 		}
 		s := string(content)
-		for _, rule := range GetRules() {
-			if ContainsInt(ignoreCheckerId, rule.Id) {
-				continue
+		for _, id := range checkerIds {
+			rule, err := GetRule(id)
+			if err != nil {
+				logs.E("checker id %v not found", id)
+				return
 			}
 			checkResult := rule.Exec(file, s)
 			ret = append(ret, checkResult...)

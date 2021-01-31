@@ -5,6 +5,7 @@ import (
 	"github.com/tianshi25/additionalCheck/db"
 	"github.com/tianshi25/additionalCheck/logs"
 	"github.com/tianshi25/additionalCheck/tool"
+	. "github.com/tianshi25/additionalCheck/filter"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -12,18 +13,30 @@ import (
 	"strings"
 )
 
-func GetPara() (fileList []string, ignoreCheckerIds []int, getInfoCheckerId int) {
+func GetPara() (fileList []string, checkerIds []int, getInfoCheckerId int) {
 	searchPath := flag.String("path", ".", "paths to check\ndefault:.")
-	ignoreStr := flag.String("ignore", "", "ignore checker id:\nexample: 1,2\n"+db.GetBriefs())
+	ignoreStr := flag.String("no", "", "ignore checker id:\nexample: 1,2\n"+db.GetBriefs())
+	onlyStr := flag.String("only", "", "checker id\nexample: 1,2\n"+db.GetBriefs())
 	extensionStr := flag.String("ext", "c,cpp,h,hpp,java,go", "file extension to check\ndefault: c,cpp,h,hpp,java,go")
 	logLevel := flag.String("log", "Error", "log level\nvalue: Error Warn Info Verbose\ndefault:Error")
 	getInfoCheckerIdAddr := flag.Int("info", 0, "get checker id info\n"+db.GetBriefs())
 	flag.Parse()
 
+	if len(*ignoreStr) != 0 &&  len(*onlyStr) != 0 {
+		logs.E("ignore and only are conflict para")
+		return
+	}
+
 	getInfoCheckerId = *getInfoCheckerIdAddr
 	extensions := getExtensionList(*extensionStr)
 	fileList = getFileList(*searchPath, extensions)
-	ignoreCheckerIds = getIgnoreCheckerId(*ignoreStr)
+	if len(*ignoreStr) != 0 {
+		checkerIds = getCheckIdNotIgnore(*ignoreStr)
+	} else {
+		checkerIds =getCheckerId(*onlyStr)
+	}
+
+	SetFilter(*searchPath)
 	setLogLevel(*logLevel)
 	return
 }
@@ -43,8 +56,8 @@ func setLogLevel(level string) {
 	logs.SetLevel(logLevel)
 }
 
-func getIgnoreCheckerId(flagStr string) []int {
-	ids := []int{}
+func getCheckerId(flagStr string) []int {
+	var ids []int
 	for _, s := range strings.Split(flagStr, ",") {
 		if len(s) == 0 {
 			continue
@@ -115,5 +128,16 @@ func getFileList(searchPath string, extensions []string) (fileList []string) {
 	}
 
 	logs.I("files to check:" + strings.Join(fileList, "\n"))
+	return
+}
+
+func getCheckIdNotIgnore(flagStr string) (checkerIds []int) {
+	ignoreCheckerIds := getCheckerId(flagStr)
+	for _, rule := range db.GetRules() {
+		if tool.ContainsInt(ignoreCheckerIds, rule.Id) {
+			continue
+		}
+		checkerIds = append(checkerIds, rule.Id)
+	}
 	return
 }

@@ -30,7 +30,7 @@ func TestGetIgnoreCheckerId(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		ret := getIgnoreCheckerId(test.in)
+		ret := getCheckerId(test.in)
 		if reflect.DeepEqual(ret, tests) {
 			t.Errorf("test fail, test:%#v | ret:%#v", test, ret)
 		}

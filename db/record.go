@@ -1,6 +1,8 @@
 package db
 
-import ()
+import (
+	"fmt"
+)
 
 type Record struct {
 	filePath  string
@@ -13,8 +15,8 @@ func NewRecord(filePath string, lineNum int, errorId int, errorPara []interface{
 	return Record{filePath, lineNum, errorId, errorPara}
 }
 
-func (r Record) GetStr() string {
-	return GetResultStr(r.errorId, r.filePath, r.lineNum, r.errorPara)
+func (r1 Record) GetStr() string {
+	return GetResultStr(r1.errorId, r1.filePath, r1.lineNum, r1.errorPara)
 }
 
 func GetRecordsStr(l []Record) (ret []string) {
@@ -54,4 +56,8 @@ func (r1 *Record) Swap(r2 *Record) {
 	r1.lineNum, r2.lineNum = r2.lineNum, r1.lineNum
 	r1.errorId, r2.errorId = r2.errorId, r1.errorId
 	r1.errorPara, r2.errorPara = r2.errorPara, r1.errorPara
+}
+
+func (r1 *Record) GetPathLineStr() string {
+	return fmt.Sprintf("%v:%v", r1.filePath, r1.lineNum)
 }
