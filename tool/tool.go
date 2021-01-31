@@ -37,7 +37,7 @@ func GetAllCommentsWithLineNum(s string) (sRet []string, iRet []int) {
 	}
 
 	for _, indexRange := range indexRanges {
-		comment := s[indexRange[0] : indexRange[1]]
+		comment := s[indexRange[0]:indexRange[1]]
 		lineNum := strings.Count(s[:indexRange[0]], "\n") + 1
 		sRet = append(sRet, comment)
 		iRet = append(iRet, lineNum)

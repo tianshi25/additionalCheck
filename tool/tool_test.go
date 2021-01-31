@@ -28,7 +28,7 @@ func TestRemoveWindowsLineEnd(t *testing.T) {
 
 func TestGetAllCommentsWithLinNum(t *testing.T) {
 	tests := []struct {
-		in  string
+		in   string
 		out1 []string
 		out2 []int
 	}{

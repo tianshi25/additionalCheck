@@ -2,14 +2,14 @@ package filter
 
 import (
 	"fmt"
-	"github.com/tianshi25/additionalCheck/tool"
-	"os"
+	"github.com/go-git/go-git/v5"
 	. "github.com/tianshi25/additionalCheck/db"
 	"github.com/tianshi25/additionalCheck/logs"
-	"github.com/go-git/go-git/v5"
+	"github.com/tianshi25/additionalCheck/tool"
+	"os"
 	"regexp"
-	"strings"
 	"strconv"
+	"strings"
 )
 
 var needCareKeys map[string]int
@@ -36,14 +36,14 @@ func SetFilter(path string) {
 	head, err := repo.Head()
 	checkError(err)
 
-    lastCommit, err := repo.CommitObject(head.Hash())
+	lastCommit, err := repo.CommitObject(head.Hash())
 	checkError(err)
 
-    beforeLastCommit, err := lastCommit.Parent(0)
-    checkError(err)
+	beforeLastCommit, err := lastCommit.Parent(0)
+	checkError(err)
 
-    patch, err := lastCommit.Patch(beforeLastCommit)
-    checkError(err)
+	patch, err := lastCommit.Patch(beforeLastCommit)
+	checkError(err)
 
 	patchStr := patch.String()
 	patchStr = tool.RemoveWindowsLineEnd(patchStr)
@@ -81,7 +81,7 @@ func FilterFilePaths(filePaths []string) (ret []string) {
 	return
 }
 
-func filterRecords(records []Record) (ret []Record){
+func FilterRecords(records []Record) (ret []Record) {
 	for _, record := range records {
 		if recordPassFilter(record) {
 			ret = append(ret, record)
@@ -91,20 +91,21 @@ func filterRecords(records []Record) (ret []Record){
 }
 
 func getKeyStr(record Record) string {
-    return record.GetPathLineStr()
+	return record.GetPathLineStr()
 }
 
 func addKeyToFilter(filePath string, start, num int) {
-	for i := 0; i < num; i++ {
+	// extend check to one line above and below
+	for i := -1; i < num+1; i++ {
 		lineNum := start + i
 		key := fmt.Sprintf("%v:%v", filePath, lineNum)
-		 needCareKeys[key] = 1
+		needCareKeys[key] = 1
 	}
 }
 
 func recordPassFilter(record Record) bool {
 	// key not in no pass list
-	if  needCareKeys[getKeyStr(record)] == 0 {
+	if needCareKeys[getKeyStr(record)] == 0 {
 		return false
 	}
 	return true

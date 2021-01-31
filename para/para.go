@@ -3,9 +3,9 @@ package para
 import (
 	"flag"
 	"github.com/tianshi25/additionalCheck/db"
+	. "github.com/tianshi25/additionalCheck/filter"
 	"github.com/tianshi25/additionalCheck/logs"
 	"github.com/tianshi25/additionalCheck/tool"
-	. "github.com/tianshi25/additionalCheck/filter"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -22,7 +22,7 @@ func GetPara() (fileList []string, checkerIds []int, getInfoCheckerId int) {
 	getInfoCheckerIdAddr := flag.Int("info", 0, "get checker id info\n"+db.GetBriefs())
 	flag.Parse()
 	setLogLevel(*logLevel)
-	if len(*ignoreStr) != 0 &&  len(*onlyStr) != 0 {
+	if len(*ignoreStr) != 0 && len(*onlyStr) != 0 {
 		logs.E("ignore and only are conflict para")
 		return
 	}
@@ -30,10 +30,10 @@ func GetPara() (fileList []string, checkerIds []int, getInfoCheckerId int) {
 	getInfoCheckerId = *getInfoCheckerIdAddr
 	extensions := getExtensionList(*extensionStr)
 	fileList = getFileList(*searchPath, extensions)
-	if len(*ignoreStr) != 0 {
-		checkerIds = getCheckIdNotIgnore(*ignoreStr)
+	if len(*onlyStr) != 0 {
+		checkerIds = getCheckerId(*onlyStr)
 	} else {
-		checkerIds =getCheckerId(*onlyStr)
+		checkerIds = getCheckIdNotIgnore(*ignoreStr)
 	}
 
 	SetFilter(*searchPath)

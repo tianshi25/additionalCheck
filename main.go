@@ -4,6 +4,7 @@ import (
 	"fmt"
 	_ "github.com/tianshi25/additionalCheck/checkers"
 	. "github.com/tianshi25/additionalCheck/db"
+	"github.com/tianshi25/additionalCheck/filter"
 	"github.com/tianshi25/additionalCheck/logs"
 	// . "github.com/tianshi25/additionalCheck/filter"
 	. "github.com/tianshi25/additionalCheck/para"
@@ -38,6 +39,7 @@ func doJob(fileList []string, checkerIds []int) (ret []Record) {
 				return
 			}
 			checkResult := rule.Exec(file, s)
+			checkResult = filter.FilterRecords(checkResult)
 			ret = append(ret, checkResult...)
 		}
 	}
