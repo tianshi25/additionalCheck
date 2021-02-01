@@ -5,7 +5,7 @@ import (
 	"github.com/go-git/go-git/v5"
 	. "github.com/tianshi25/additionalCheck/db"
 	"github.com/tianshi25/additionalCheck/logs"
-	"github.com/tianshi25/additionalCheck/tool"
+	. "github.com/tianshi25/additionalCheck/tool"
 	"os"
 	"regexp"
 	"strconv"
@@ -46,7 +46,7 @@ func SetFilter(path string) {
 	checkError(err)
 
 	patchStr := patch.String()
-	patchStr = tool.RemoveWindowsLineEnd(patchStr)
+	patchStr = RemoveWindowsLineEnd(patchStr)
 	reg := regexp.MustCompile("\n(\\+\\+\\+ b\\/(.*)|@@ \\-\\d+,\\d+ \\+(\\d+),(\\d+) @@)")
 	currFilePath := ""
 	for _, matched := range reg.FindAllStringSubmatch(patchStr, -1) {
@@ -73,7 +73,11 @@ func SetFilter(path string) {
 }
 
 func FilterFilePaths(filePaths []string) (ret []string) {
+	if len(needCareFiles) == 0 {
+		return filePaths
+	}
 	for _, path := range filePaths {
+		path = ConvertWinPath(path)
 		if needCareFiles[path] == 1 {
 			ret = append(ret, path)
 		}
@@ -82,6 +86,9 @@ func FilterFilePaths(filePaths []string) (ret []string) {
 }
 
 func FilterRecords(records []Record) (ret []Record) {
+	if len(needCareKeys) == 0 {
+		return records
+	}
 	for _, record := range records {
 		if recordPassFilter(record) {
 			ret = append(ret, record)

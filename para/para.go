@@ -20,6 +20,8 @@ func GetPara() (fileList []string, checkerIds []int, getInfoCheckerId int) {
 	extensionStr := flag.String("ext", "c,cpp,h,hpp,java,go", "file extension to check\ndefault: c,cpp,h,hpp,java,go")
 	logLevel := flag.String("log", "Error", "log level\nvalue: Error Warn Info Verbose\ndefault:Error")
 	getInfoCheckerIdAddr := flag.Int("info", 0, "get checker id info\n"+db.GetBriefs())
+	isGitRepo := flag.Bool("isGitRepo", true, "path is git repo")
+
 	flag.Parse()
 	setLogLevel(*logLevel)
 	if len(*ignoreStr) != 0 && len(*onlyStr) != 0 {
@@ -36,8 +38,10 @@ func GetPara() (fileList []string, checkerIds []int, getInfoCheckerId int) {
 		checkerIds = getCheckIdNotIgnore(*ignoreStr)
 	}
 
-	SetFilter(*searchPath)
-	fileList = FilterFilePaths(fileList)
+	if *isGitRepo {
+		SetFilter(*searchPath)
+		fileList = FilterFilePaths(fileList)
+	}
 	logs.I("files to check:\n" + strings.Join(fileList, "\n"))
 	return
 }

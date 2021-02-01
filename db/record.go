@@ -2,6 +2,7 @@ package db
 
 import (
 	"fmt"
+	. "github.com/tianshi25/additionalCheck/tool"
 )
 
 type Record struct {
@@ -59,5 +60,5 @@ func (r1 *Record) Swap(r2 *Record) {
 }
 
 func (r1 *Record) GetPathLineStr() string {
-	return fmt.Sprintf("%v:%v", r1.filePath, r1.lineNum)
+	return ConvertWinPath(fmt.Sprintf("%v:%v", r1.filePath, r1.lineNum))
 }

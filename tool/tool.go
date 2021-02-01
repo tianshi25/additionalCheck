@@ -83,3 +83,7 @@ func FileExtensionIsC(currPath string) bool {
 func FileExtensionIsJava(fileName string) bool {
 	return strings.HasSuffix(fileName, ".java") && len(fileName) > len(".java")
 }
+
+func ConvertWinPath(path string) string {
+	return strings.Replace(path, "\\", "/", -1)
+}
