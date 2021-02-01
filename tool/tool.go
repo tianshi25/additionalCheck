@@ -68,8 +68,17 @@ func GetIndentSpaceNum(s string) int {
 	return len(s) - len(strings.TrimLeft(s, " "))
 }
 
-func FileExtensionIsC(currPath string) bool {
+func FileExtensionIsC(path string) bool {
 	extensions := []string{"c", "cpp", "h", "hpp"}
+	return fileExtensionMatchReg(path, extensions)
+}
+
+func FileExtensionIsJava(path string) bool {
+	extensions := []string{"java"}
+	return fileExtensionMatchReg(path, extensions)
+}
+
+func fileExtensionMatchReg(currPath string, extensions []string) bool {
 	regStr := `.+\.(` + strings.Join(extensions, "|") + `)$`
 	if matched, err := regexp.MatchString(regStr, filepath.Base(currPath)); err != nil {
 		logs.E("error occur when match string")
@@ -78,10 +87,6 @@ func FileExtensionIsC(currPath string) bool {
 		return true
 	}
 	return false
-}
-
-func FileExtensionIsJava(fileName string) bool {
-	return strings.HasSuffix(fileName, ".java") && len(fileName) > len(".java")
 }
 
 func ConvertWinPath(path string) string {

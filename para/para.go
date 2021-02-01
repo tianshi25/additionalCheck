@@ -14,13 +14,15 @@ import (
 )
 
 func GetPara() (fileList []string, checkerIds []int, getInfoCheckerId int) {
-	searchPath := flag.String("path", ".", "paths to check\ndefault:.")
-	ignoreStr := flag.String("no", "", "ignore checker id:\nexample: 1,2\n"+db.GetBriefs())
+	searchPath := flag.String("path", ".", "paths to check")
+	ignoreStr := flag.String("no", "", "ignore checker id:\nexample: 1,2"+db.GetBriefs())
 	onlyStr := flag.String("only", "", "checker id\nexample: 1,2\n"+db.GetBriefs())
-	extensionStr := flag.String("ext", "c,cpp,h,hpp,java,go", "file extension to check\ndefault: c,cpp,h,hpp,java,go")
-	logLevel := flag.String("log", "Error", "log level\nvalue: Error Warn Info Verbose\ndefault:Error")
+	extensionStr := flag.String("ext", "c,cpp,h,hpp,java,go", "file extension to check")
+	logLevel := flag.String("log", "Error", "log level\nvalue: Error Warn Info Verbose")
 	getInfoCheckerIdAddr := flag.Int("info", 0, "get checker id info\n"+db.GetBriefs())
-	isGitRepo := flag.Bool("isGitRepo", true, "path is git repo")
+	isGitRepo := flag.Bool("isGitRepo", true,
+		`path is git repo
+When this para is set, results are filtered by changes in last commit`)
 
 	flag.Parse()
 	setLogLevel(*logLevel)

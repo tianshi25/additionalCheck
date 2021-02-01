@@ -103,7 +103,8 @@ func getKeyStr(record Record) string {
 
 func addKeyToFilter(filePath string, start, num int) {
 	// extend check to one line above and below
-	for i := -1; i < num+1; i++ {
+	context := 1
+	for i := -context; i < num + context; i++ {
 		lineNum := start + i
 		key := fmt.Sprintf("%v:%v", filePath, lineNum)
 		needCareKeys[key] = 1
