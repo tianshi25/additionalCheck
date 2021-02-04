@@ -1,8 +1,6 @@
 package tool
 
 import (
-	"github.com/tianshi25/additionalCheck/logs"
-	"path/filepath"
 	"regexp"
 	"strings"
 )
@@ -70,20 +68,30 @@ func GetIndentSpaceNum(s string) int {
 
 func FileExtensionIsC(path string) bool {
 	extensions := []string{"c", "cpp", "h", "hpp"}
-	return fileExtensionMatchReg(path, extensions)
+	return FileExtensionMatchReg(path, extensions)
 }
 
 func FileExtensionIsJava(path string) bool {
 	extensions := []string{"java"}
-	return fileExtensionMatchReg(path, extensions)
+	return FileExtensionMatchReg(path, extensions)
 }
 
-func fileExtensionMatchReg(currPath string, extensions []string) bool {
+var regStrMap map[string]*regexp.Regexp
+
+func getReg(key string) regexp.Regexp {
+	if regStrMap == nil {
+		regStrMap = make(map[string]*regexp.Regexp)
+	}
+	if regStrMap[key] == nil {
+		regStrMap[key] = regexp.MustCompile(key)
+	}
+	return *regStrMap[key]
+}
+
+func FileExtensionMatchReg(filePath string, extensions []string) bool {
 	regStr := `.+\.(` + strings.Join(extensions, "|") + `)$`
-	if matched, err := regexp.MatchString(regStr, filepath.Base(currPath)); err != nil {
-		logs.E("error occur when match string")
-		return false
-	} else if matched {
+	reg := getReg(regStr)
+	if reg.FindString(filePath) != "" {
 		return true
 	}
 	return false

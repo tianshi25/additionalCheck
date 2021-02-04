@@ -72,15 +72,13 @@ func SetFilter(path string) {
 
 }
 
-func FilterFilePaths(filePaths []string) (ret []string) {
+func GetFileListFromFilter(filePaths []string) (ret []string) {
 	if len(needCareFiles) == 0 {
 		return filePaths
 	}
-	for _, path := range filePaths {
-		path = ConvertWinPath(path)
-		if needCareFiles[path] == 1 {
-			ret = append(ret, path)
-		}
+	ret = make([]string, 0, len(needCareFiles))
+	for k := range needCareFiles {
+		ret = append(ret, k)
 	}
 	return
 }

@@ -5,10 +5,9 @@ import (
 	"github.com/tianshi25/additionalCheck/db"
 	. "github.com/tianshi25/additionalCheck/filter"
 	"github.com/tianshi25/additionalCheck/logs"
-	"github.com/tianshi25/additionalCheck/tool"
+	. "github.com/tianshi25/additionalCheck/tool"
 	"os"
 	"path/filepath"
-	"regexp"
 	"strconv"
 	"strings"
 )
@@ -20,7 +19,7 @@ func GetPara() (fileList []string, checkerIds []int, getInfoCheckerId int) {
 	extensionStr := flag.String("ext", "c,cpp,h,hpp,java,go", "file extension to check")
 	logLevel := flag.String("log", "Error", "log level\nvalue: Error Warn Info Verbose")
 	getInfoCheckerIdAddr := flag.Int("info", 0, "get checker id info\n"+db.GetBriefs())
-	isGitRepo := flag.Bool("isGitRepo", true,
+	isGitRepo := flag.Bool("gitrepo", false,
 		`path is git repo
 When this para is set, results are filtered by changes in last commit`)
 
@@ -33,16 +32,25 @@ When this para is set, results are filtered by changes in last commit`)
 
 	getInfoCheckerId = *getInfoCheckerIdAddr
 	extensions := getExtensionList(*extensionStr)
-	fileList = getFileList(*searchPath, extensions)
+
 	if len(*onlyStr) != 0 {
 		checkerIds = getCheckerId(*onlyStr)
 	} else {
 		checkerIds = getCheckIdNotIgnore(*ignoreStr)
 	}
 
+	err := os.Chdir(*searchPath)
+	if err != nil {
+		logs.E("fails to cd " + *searchPath)
+		return
+	}
+
 	if *isGitRepo {
-		SetFilter(*searchPath)
-		fileList = FilterFilePaths(fileList)
+		SetFilter(".")
+		fileList = GetFileListFromFilter(fileList)
+	} else {
+		logs.E("tianshi52")
+		fileList = getFileList(".", extensions)
 	}
 	logs.I("files to check:\n" + strings.Join(fileList, "\n"))
 	return
@@ -99,7 +107,6 @@ func getExtensionRegex(extensions []string) string {
 }
 
 func getFileListForPath(searchPath string, extensions []string) (fileList []string) {
-	regex := getExtensionRegex(extensions)
 	err := filepath.Walk(searchPath, func(currPath string, info os.FileInfo, err error) error {
 		if err != nil {
 			logs.E("Process path %q error %v", currPath, err)
@@ -109,10 +116,7 @@ func getFileListForPath(searchPath string, extensions []string) (fileList []stri
 			logs.V("skipping a dir without errors: %+v", info.Name())
 			return nil
 		}
-		if matched, err := regexp.MatchString(regex, filepath.Base(currPath)); err != nil {
-			logs.E("error occur when match string")
-			return err
-		} else if matched {
+		if (FileExtensionMatchReg(currPath, extensions)) {
 			fileList = append(fileList, currPath)
 		}
 		logs.V("add file: %q\n", currPath)
@@ -129,9 +133,7 @@ func getFileList(searchPath string, extensions []string) (fileList []string) {
 	newFileList := getFileListForPath(searchPath, extensions)
 	for _, file := range newFileList {
 		file, _ = filepath.Rel(searchPath, file)
-		if !tool.ContainsString(fileList, file) {
-			fileList = append(fileList, file)
-		}
+		fileList = append(fileList, file)
 	}
 
 	return
@@ -140,7 +142,7 @@ func getFileList(searchPath string, extensions []string) (fileList []string) {
 func getCheckIdNotIgnore(flagStr string) (checkerIds []int) {
 	ignoreCheckerIds := getCheckerId(flagStr)
 	for _, rule := range db.GetRules() {
-		if tool.ContainsInt(ignoreCheckerIds, rule.Id) {
+		if ContainsInt(ignoreCheckerIds, rule.Id) {
 			continue
 		}
 		checkerIds = append(checkerIds, rule.Id)
