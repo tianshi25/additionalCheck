@@ -49,7 +49,6 @@ When this para is set, results are filtered by changes in last commit`)
 		SetFilter(".")
 		fileList = GetFileListFromFilter(fileList)
 	} else {
-		logs.E("tianshi52")
 		fileList = getFileList(".", extensions)
 	}
 	logs.I("files to check:\n" + strings.Join(fileList, "\n"))

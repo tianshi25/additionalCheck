@@ -25,34 +25,36 @@ func main() {
 	fmt.Println(strings.Join(GetRecordsStr(records), "\n"))
 }
 
-func doJobInParallel(filePath string, fileContent string, checkId int, ch chan []Record) {
+func doJobInParallel(filePath string, checkId int, ch chan []Record) {
 	checkResult := make([]Record, 0)
+	addResult := func (result []Record) {
+		ch <- checkResult
+	}
+	defer addResult(checkResult)
 	rule, err := GetRule(checkId)
 	if err != nil {
 		logs.E("checker id %v not found", checkId)
-		ch <- checkResult
 		return
 	}
-	checkResult = rule.Exec(filePath, fileContent)
+	fileContent, err := ioutil.ReadFile(filePath)
+	if err != nil {
+		logs.E("fail to open file %v", filePath)
+		return
+	}
+	checkResult = rule.Exec(filePath, string(fileContent))
 	checkResult = filter.FilterRecords(checkResult)
-	ch <- checkResult
 }
 
 func doJob(fileList []string, checkerIds []int) (ret []Record) {
 	count := 0
 	ch := make(chan []Record)
 	for _, filePath := range fileList {
-		content, err := ioutil.ReadFile(filePath)
-		if err != nil {
-			logs.E("fail to open file %v", filePath)
-		}
 		for _, id := range checkerIds {
 			count += 1
-			go doJobInParallel(filePath, string(content), id, ch)
+			go doJobInParallel(filePath, id, ch)
 		}
 	}
 	for i := 0; i < count; i++ {
-		logs.E("tianshi count %d", i)
 		ret = append(ret, <-ch...)
 	}
 	return
