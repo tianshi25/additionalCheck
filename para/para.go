@@ -116,7 +116,7 @@ func getFileListForPath(searchPath string, extensions []string) (fileList []stri
 			logs.V("skipping a dir without errors: %+v", info.Name())
 			return nil
 		}
-		if (FileExtensionMatchReg(currPath, extensions)) {
+		if FileExtensionMatchReg(currPath, extensions) {
 			fileList = append(fileList, currPath)
 		}
 		logs.V("add file: %q\n", currPath)

@@ -35,7 +35,7 @@ func doJobInParallel(filePath string, fileContent string, checkId int, ch chan [
 	}
 	checkResult = rule.Exec(filePath, fileContent)
 	checkResult = filter.FilterRecords(checkResult)
-    ch <- checkResult
+	ch <- checkResult
 }
 
 func doJob(fileList []string, checkerIds []int) (ret []Record) {
@@ -51,7 +51,7 @@ func doJob(fileList []string, checkerIds []int) (ret []Record) {
 			go doJobInParallel(filePath, string(content), id, ch)
 		}
 	}
-	for i:=0; i<count; i++ {
+	for i := 0; i < count; i++ {
 		logs.E("tianshi count %d", i)
 		ret = append(ret, <-ch...)
 	}
